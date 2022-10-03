@@ -1,0 +1,48 @@
+{
+    "name":"Resonate FNFT AddressLock Proxy Metadata",
+    "description":"Resonate allows for the separation of interest and principal",
+    "updates": [],
+    "displays": [
+        {
+            "label":"",
+            "primitive":"boolean",
+            "encode":"bool",
+            "index":0
+        },
+        {
+            "label":"Expected ROI [%]",
+            "primitive":"number",
+            "encode":"uint128",
+            "extra_data": {
+                "decimal_precision":16
+            },
+            "index":1
+        },
+        {
+            "label":"Expected Tokens Per Packet",
+            "primitive":"number",
+            "encode":"uint256",
+            "extra_data": {
+                "decimal_precision":-1,
+                "source_precision_from_index":4
+            },
+            "index":2
+        },
+        {
+            "label":"Accumulated Interest Per Packet",
+            "primitive":"number",
+            "encode":"uint256",
+            "extra_data": {
+                "decimal_precision":-1,
+                "source_precision_from_index":4
+            },
+            "index":3
+        },
+        {
+            "label":"",
+            "encode":"uint8",
+            "primitive":"integer",
+            "index":4
+        }
+    ]
+} 

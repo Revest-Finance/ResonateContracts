@@ -1,0 +1,12 @@
+[default]
+src = 'contracts'
+out = 'out'
+libs = ['lib', 'node_modules']
+test = 'test/foundry'
+cache_path = 'forge-cache'
+fuzz_runs = 256
+eth-rpc-url = "YOUR_RPC_HERE"
+block_number = 15643467
+# eth-rpc-url = "https://rpc.ftm.tools/"
+# block_number = 47971156
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config

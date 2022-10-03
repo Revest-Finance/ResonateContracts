@@ -1,0 +1,7 @@
+PRIVATE_KEY=
+MAINNET=//RPC to Ethereum Mainnet
+TESTING_PRIVATE=
+RINKEBY=//RPC to Rinkeby testnet
+ETHERSCAN_API=//For whatever network you are on
+MATIC=//RPC to MATIC, may leave blank
+RUST_BACKTRACE=full

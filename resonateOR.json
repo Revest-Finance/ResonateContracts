@@ -1,0 +1,103 @@
+{
+    "name":"Resonate FNFT OutputReceiver Proxy Metadata",
+    "description":"Resonate allows for the separation of interest and principal",
+    "front_display": [
+        {
+            "label":"Interest:",
+            "encode":"uint",
+            "primitive":"integer",
+            "extra_data":{
+                "decimal_precision":-1,
+                "source_precision_from_index":8,
+                "renderWhenIndexNotEmpty":0
+            },
+            "index":0
+        },
+        {
+            "label":"Principal",
+            "encode":"bool",
+            "primitive":"alert",
+            "extra_data": {
+                "renderWhenIndexNotEmpty":2
+            },
+            "index":9
+        },
+        {
+            "label":"Interest",
+            "encode":"bool",
+            "primitive":"alert",
+            "extra_data": {
+                "renderWhenIndexNotEmpty":2
+            },
+            "index":10
+        },
+        {
+            "label":"Tokens:",
+            "encode":"string",
+            "primitive":"string",
+            "index":1
+        },
+        {
+            "label":"image_overlay",
+            "primitive":"image",
+            "value":"https://revest.mypinata.cloud/ipfs/QmPepEPsQoxJUzwYmf93Po9g15g9wCBt781ELedy4STgeB"
+        }
+    ],
+    "info_modal": [
+        
+        {
+            "label":"Pool ID",
+            "encode":"bytes32",
+            "primitive":"address",
+            "index":2
+        }, 
+        {
+            "label":"Assets",
+            "encode":"string[2]",
+            "primitive":"stringArray",
+            "index":3
+        },   
+        {
+            "label":"Underlying Vault",
+            "encode":"address",
+            "primitive":"address",
+            "index":4
+        },
+        {
+            "label":"ERC-4626 Vault",
+            "encode":"address",
+            "primitive":"address",
+            "index":5
+        },
+        {
+            "label":"Smart Wallet Address",
+            "encode":"address",
+            "primitive":"address",
+            "index":6
+        },    
+        {
+            "label":"Upfront Payout Rate [%]",
+            "encode":"uint128",
+            "primitive":"integer",
+            "extra_data":{
+                "decimal_precision":16
+            },
+            "index":7
+        },
+        {
+            "label":"",
+            "encode":"uint8",
+            "primitive":"integer",
+            "index":8
+        }
+    ],
+    "updates":[
+        {
+            "label":"Claim pending interest",
+            "primitive":"button",
+            "extra_data":{
+                "renderWhenIndexNotEmpty":0
+            }
+        }
+    ]
+} 

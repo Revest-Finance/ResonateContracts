@@ -1,0 +1,49 @@
+// SPDX-License-Identifier: GNU-GPL v3.0 or later
+
+ER001 - Vault does not have an adapter or does not conform to EIP-4626
+ER002 - Pool already exists
+ER003 - Zero value where a value should be non-zero
+ER004 - Pool does not exist
+ER005 - Amount is not a multiple of standard packet size for consumers
+ER006 - Amount is not a multiple of standard packet size for producers
+ER007 - Cannot remove an order you don't own from the pool
+ER008 - Lockup period for a pool must be greater than minimum lockup period
+ER009 - Only the interest-bearing FNFT can claim interest
+ER010 - You cannot make calls for an FNFT you do not own
+ER011 - You cannot make calls as the Revest controller if you are not the Revest controller
+ER012 - You cannot make calls as the Revest vault if you are not the Revest vault
+ER013 - Quantity for interest FNFTs must always be singular
+ER014 - You cannot access smart wallets if you are not the Resonate master
+ER015 - Cannot lock for more or less than max and min lockups
+ER016 - Cannot claim interest on principal with zero packets remaining
+ER017 - You cannot make calls as the Proxy Output Receiver contract if you are not the OutputReceiver
+ER018 - Cannot farm a stablecoin
+ER019 - Action taken by the Smart-Wallet illegally decreases balance
+ER020 - Only the sandwich bot may invoke this function
+ER021 - Resonate can only be set once
+ER022 - Proxy Call to external contract failed
+ER023 - Pool packet size cannot be zero
+ER024 - Caller is not the owner
+ER025 - Proxy Call to external contract tried to perform illegal approval call\
+ER026 - Caller is not authorized to break the glass.
+ER027 - Cannot perform action while glass is broken
+ER028 - Illegal Call to external contract's fallback function
+ER029 - Call can only be made by an EOA, not a contract.
+ER030 - Function call is blacklisted and therefore cannot be whitelisted either.
+ER031 - Can only initialize once
+ER032 - Function can only be called by the resonate DAO
+ER033 – Must have an oracle to create a cross-asset pool
+ER034 – Must be a valid ERC-1155 recipient to create an order
+ER035 - TWAP must be initialized to check it's price
+ER036 – Cannot update a TWAP that fast
+ER037 - Stale TWAP data
+ER038 - TWAP already exists
+ER039 - Pool Id for specified FNFT must match provided one to claim batch interest
+ER040 - No shares to be redeemed based on current interest for batch claiming
+ER041 – Method can only be called by valid harvesters – to be a valid harvester, your contract must be whitelisted.
+ER042 - Immutable variables should not change
+ER043 - Deposit must be greater than minimum deposit
+ER044 – Array lengths must be equal
+ER045 – Chainlink price cannot be zero
+ER046 – Incomplete Chainlink round
+ER047 – Stale chainlink price!

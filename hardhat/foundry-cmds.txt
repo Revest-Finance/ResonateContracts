@@ -1,0 +1,3 @@
+Run forge test: forge test --rpc-url YOUR_RPC_HERE --fork-block-number 15284927 --match-contract BatchInterestTest -vvvv
+Execute foundry script: forge script scripts/foundry/createPool.s.sol --fork-url http://127.0.0.1:8545 --private-key YOUR_PRIVATE_KEY_HERE -vvv --broadcast
+Start anvil: anvil --fork-url YOUR_RPC_HERE --fork-block-number 15133322
