@@ -29,6 +29,7 @@ contract UniswapV2TWAPOracle is ProviderAwareOracle {
         address pairAddress; // 20 bytes
         bool isToken0; // 1 byte
         uint8 decimals; // 1 byte
+        uint32 lastTimeTwapPoked;
     }
 
     /// The commonly-used asset tokens on this TWAP are paired with
@@ -71,7 +72,7 @@ contract UniswapV2TWAPOracle is ProviderAwareOracle {
      * @dev returns the TWAP for the provided pair as of the last update
      */
     function getSafePrice(address asset) public view returns (uint256 amountOut) {
-        require(block.timestamp - twaps[asset].timestampLatest <= MAX_UPDATE, 'ER037');
+        require(block.timestamp - twaps[asset].lastTimeTwapPoked <= MAX_UPDATE, 'ER037');
         TwapConfig memory twap = twaps[asset];
         amountOut = _convertPrice(asset, twap.lastUpdateTwapPrice);
     }
@@ -131,9 +132,12 @@ contract UniswapV2TWAPOracle is ProviderAwareOracle {
         TwapConfig storage twap = twaps[asset];
         FixedPoint.uq112x112 memory lastAverage;
         lastAverage = FixedPoint.uq112x112(uint224((cumulativeLast - lastCumPrice) / (lastTimeSync - lastTimeUpdate)));
-        twap.lastUpdateTwapPrice = lastAverage;
-        twap.lastUpdateCumulativePrice = cumulativeLast;
-        twap.timestampLatest = lastTimeSync;
+        if(lastTimeSync > lastTimeUpdate) {
+            twap.lastUpdateTwapPrice = lastAverage;
+            twap.lastUpdateCumulativePrice = cumulativeLast;
+            twap.timestampLatest = lastTimeSync;
+        }   
+        twap.lastTimeTwapPoked = uint32(block.timestamp);
 
         // Call sub method HERE to same thing getSafePrice uses to avoid extra SLOAD
         amountOut = _convertPrice(asset, lastAverage);
@@ -170,7 +174,7 @@ contract UniswapV2TWAPOracle is ProviderAwareOracle {
         require(twap.decimals > 0, 'ER035');
         // Enforce passage of a safe amount of time
         lastTimeUpdate = twap.timestampLatest;
-        require(block.timestamp > lastTimeUpdate + MIN_UPDATE, 'ER036');
+        require(block.timestamp > twap.lastTimeTwapPoked + MIN_UPDATE, 'ER036');
         IUniswapV2Pair pair = IUniswapV2Pair(twap.pairAddress);
         cumulativeLast = twap.isToken0 ? pair.price0CumulativeLast() : pair.price1CumulativeLast();
         lastCumPrice = twap.lastUpdateCumulativePrice;
@@ -199,7 +203,8 @@ contract UniswapV2TWAPOracle is ProviderAwareOracle {
             FixedPoint.uq112x112(0),
             pair, 
             isToken0, 
-            IERC20Detailed(asset).decimals()
+            IERC20Detailed(asset).decimals(),
+            uint32(block.timestamp)
         );
         (, , twap.timestampLatest) = uni_pair.getReserves();
         twaps[asset] = twap;
