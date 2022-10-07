@@ -77,7 +77,7 @@ contract BalancerV2WeightedPoolPriceOracle is ProviderAwareOracle {
     /**
      * @dev updates the TWAP (if enough time has lapsed) and returns the current safe price
      */
-    function updateSafePrice(address _bpt) external returns (uint256) {
+    function updateSafePrice(address _bpt) external view returns (uint256) {
         return getSafePrice(_bpt);
     }
 
@@ -111,12 +111,8 @@ contract BalancerV2WeightedPoolPriceOracle is ProviderAwareOracle {
             poolId
         );
 
-        // console.logInt(totalSupply);
-
-        // int256 invariant = PRBMathSD59x18.toInt(1e18);
         int256 totalPi = PRBMathSD59x18.fromInt(1e18);
 
-        uint256 totalFTM;
         uint256[] memory prices = new uint256[](tokens.length);
         // update balances in 18 decimals
         for (uint256 i = 0; i < tokens.length; i++) {
@@ -138,7 +134,6 @@ contract BalancerV2WeightedPoolPriceOracle is ProviderAwareOracle {
         int256 numerator = totalPi.mul(invariant);
 
         price = uint256((numerator.toInt().div(totalSupply)));
-        // price = totalFTM / totalSupply;
     }
 
     function _checkRatio(
