@@ -1,3 +1,5 @@
+Live at [Resonate](https://resonate.finance)
+
 # Setup
 
 1. cd into hardhat
