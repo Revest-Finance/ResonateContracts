@@ -98,7 +98,7 @@ contract VelodromeTWAP is ProviderAwareOracle {
     * @dev Setup the twap for a new token to pair it to
     * @param asset token to initialize a twap for that is paired with TOKEN (WETH) 
     */
-    function initializeOracle(address asset, bool isStable) external {
+    function initializeOracle(address asset, bool isStable) external onlyOwner {
         require(asset != address(0), 'ER003');
         require(twaps[asset].pairAddress == address(0), 'ER038');
 

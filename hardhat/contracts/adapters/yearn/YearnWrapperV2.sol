@@ -19,9 +19,11 @@ import {FixedPointMathLib} from "../../lib/FixedPointMathLib.sol";
  * @author 0xTinder
  * @notice a contract for providing Yearn V2 contracts with an ERC-4626-compliant interface
  *         Developed for Resonate.
+ *         This version uses getPricePerShare instead of free funds. This may make it more resilient to migrations
+ *         However, it makes it significantly less precise for stablecoins
  * @dev The initial deposit to this contract should be made immediately following deployment
  */
-contract YearnWrapper is ERC20, IVaultWrapper, IERC4626, Ownable, ReentrancyGuard {
+contract YearnWrapperV2 is ERC20, IVaultWrapper, IERC4626, Ownable, ReentrancyGuard {
 
     using FixedPointMathLib for uint;
     using SafeERC20 for IERC20;
@@ -53,8 +55,6 @@ contract YearnWrapper is ERC20, IVaultWrapper, IERC4626, Ownable, ReentrancyGuar
     function vault() external view returns (address) {
         return address(yVault);
     }
-
-    
 
     /// @dev Verify that current Yearn vault is latest with Yearn registry. If not, migrate funds automatically
     function migrate() external {
@@ -117,6 +117,7 @@ contract YearnWrapper is ERC20, IVaultWrapper, IERC4626, Ownable, ReentrancyGuar
         uint256 shares, 
         address receiver
     ) public override nonReentrant returns (uint256 assets) {
+
         // No need to check for rounding error, previewMint rounds up.
         assets = previewMint(shares); 
 
@@ -139,7 +140,7 @@ contract YearnWrapper is ERC20, IVaultWrapper, IERC4626, Ownable, ReentrancyGuar
         address receiver,
         address owner
     ) public override nonReentrant returns (uint256 shares) {
-
+        
         if(assets == 0) {
             revert NonZeroArgumentExpected();
         }
@@ -201,18 +202,6 @@ contract YearnWrapper is ERC20, IVaultWrapper, IERC4626, Ownable, ReentrancyGuar
         uint localAssets = convertYearnSharesToAssets(yVault.balanceOf(address(this)));
         return supply == 0 ? shares : shares.mulDivDown(localAssets, supply);
     }
-
-    function getFreeFunds() public view virtual returns (uint256) {
-        uint256 lockedFundsRatio = (block.timestamp - yVault.lastReport()) * yVault.lockedProfitDegradation();
-        uint256 _lockedProfit = yVault.lockedProfit();
-
-        uint256 DEGRADATION_COEFFICIENT = 10 ** 18;
-        uint256 lockedProfit = lockedFundsRatio < DEGRADATION_COEFFICIENT ? 
-            _lockedProfit - (lockedFundsRatio * _lockedProfit / DEGRADATION_COEFFICIENT)
-            : 0; // hardcoded DEGRADATION_COEFFICIENT        
-        return yVault.totalAssets() - lockedProfit;
-    }
-
     
     function previewDeposit(uint256 assets)
         public
@@ -382,17 +371,17 @@ contract YearnWrapper is ERC20, IVaultWrapper, IERC4626, Ownable, ReentrancyGuar
 
     function convertAssetsToYearnShares(uint assets) internal view returns (uint yShares) {
         uint256 supply = yVault.totalSupply();
-        return supply == 0 ? assets : assets.mulDivUp(supply, getFreeFunds());
+        return supply == 0 ? assets : assets.mulDivUp(10**decimals(), yVault.pricePerShare());
     }
 
     function convertYearnSharesToAssets(uint yearnShares) internal view returns (uint assets) {
         uint supply = yVault.totalSupply();
-        return supply == 0 ? yearnShares : yearnShares * getFreeFunds() / supply;
+        return supply == 0 ? yearnShares : yearnShares * yVault.pricePerShare() / 10**decimals();
     }
 
     function convertSharesToYearnShares(uint shares) internal view returns (uint yShares) {
         uint supply = totalSupply(); 
-        return supply == 0 ? shares : shares.mulDivUp(yVault.balanceOf(address(this)), supply);
+        return supply == 0 ? shares : shares.mulDivUp(yVault.balanceOf(address(this)), totalSupply());
     }
 
     function allowance(address owner, address spender) public view virtual override(ERC20,IERC4626) returns (uint256) {

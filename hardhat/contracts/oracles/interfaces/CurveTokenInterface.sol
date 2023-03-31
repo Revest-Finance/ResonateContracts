@@ -9,3 +9,7 @@ interface CurveTokenV3Interface {
 interface CurveSwapInterface {
     function get_virtual_price() external view returns (uint256);
 }
+
+interface CurveLPPriceInterface {
+    function lp_price() external view returns (uint256);
+}

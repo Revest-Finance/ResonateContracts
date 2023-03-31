@@ -87,7 +87,7 @@ contract BeefyWrapper is YearnV1_4626 {
         BeefyAPI _vault = yVault;
         {
             IBeefyStrat strat = IBeefyStrat(_vault.strategy());
-            uint fee = strat.withdrawalFee();
+            uint fee = getFee(strat);
             uint DIVISOR = strat.WITHDRAWAL_MAX();
             adjustedAmount = assets.mulDivUp(DIVISOR, DIVISOR - fee);
         }
@@ -97,7 +97,7 @@ contract BeefyWrapper is YearnV1_4626 {
         BeefyAPI _vault = yVault;
         {
             IBeefyStrat strat = IBeefyStrat(_vault.strategy());
-            uint fee = strat.withdrawalFee();
+            uint fee = getFee(strat);
             uint DIVISOR = strat.WITHDRAWAL_MAX();
             assets -= assets.mulDivUp(fee, DIVISOR);
         }
@@ -119,6 +119,14 @@ contract BeefyWrapper is YearnV1_4626 {
 
     function asset() external view override returns (address) {
         return token;
+    }
+
+    function getFee(IBeefyStrat strat) private view returns (uint fee) {
+        try strat.withdrawalFee() returns (uint withdrawal) {
+            fee = withdrawal;
+        } catch {
+            fee = strat.withdrawFee();
+        }
     }
 
 }

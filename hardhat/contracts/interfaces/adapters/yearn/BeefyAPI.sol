@@ -26,6 +26,7 @@ interface BeefyAPI is IVaultV1 {
 
 interface IBeefyStrat {
     function withdrawalFee() external view returns (uint fee);
+    function withdrawFee() external view returns (uint fee);
     function WITHDRAWAL_MAX() external view returns (uint divisor);
     function paused() external view returns (bool);
 }
