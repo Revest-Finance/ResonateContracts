@@ -254,7 +254,7 @@ contract YearnWrapperAlt is ERC20, IVaultWrapper, IERC4626, Ownable, ReentrancyG
         override
         returns (uint256)
     {
-        return maxDeposit(_account)/ yVault.pricePerShare();
+        return (maxDeposit(_account) * (10 ** _decimals)) / yVault.pricePerShare();
     }
 
     function maxWithdraw(address owner)

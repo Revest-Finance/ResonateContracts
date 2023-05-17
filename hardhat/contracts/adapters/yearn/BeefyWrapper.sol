@@ -26,8 +26,8 @@ contract BeefyWrapper is YearnV1_4626 {
 
     constructor(address _vault, address _dustWallet)
         ERC20(
-            "Beefy-4646-Adapter",
-            "Beefy-4646"
+            string(abi.encodePacked(BeefyAPI(_vault).name(), "Beefy-4626-Adapter")),
+            string(abi.encodePacked(BeefyAPI(_vault).name(), "-Beefy-4626"))
         )
         YearnV1_4626(_dustWallet)
     {
